@@ -1,20 +1,23 @@
-name: Github Action Template
-description: Github Action Template
+name: Collect Env
+description: Collect env values and write to a file
 author: JeongMin Oh
 
 branding:
-  icon: file-text
+  icon: key
   color: purple
 
 inputs:
-  input:
-    description: The file to read from
-    required: true
-    default: .env.development
+  prefix:
+    description: The prefix to collect
+    required: false
   output:
-    description: The file to overwrite to
+    description: The file to write to
     required: true
-    default: .env.production
+  remove-prefix:
+    description: The prefix to remove
+    required: false
+    type: boolean
+    default: true
 
 runs:
   using: node24

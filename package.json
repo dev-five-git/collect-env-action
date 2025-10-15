@@ -1,7 +1,7 @@
 {
-	"name": "action-tools",
+	"name": "collect-env",
 	"version": "1.0.0",
-	"description": "github action template",
+	"description": "Collect env values and write to a file",
 	"author": "JeongMin Oh",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -9,6 +9,10 @@
 		"lint": "biome check",
 		"lint:fix": "biome check --write",
 		"prepare": "husky"
+	},
+	"dependencies": {
+		"@actions/core": "^1.11",
+		"@actions/io": "^1.1"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.2",
