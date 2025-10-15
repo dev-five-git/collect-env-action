@@ -21,6 +21,7 @@ This GitHub Action allows you to collect environment variables with a specific p
 | prefix | The prefix to filter environment variables by | true | - |
 | output | The output file to write the collected variables to | true | - |
 | remove-prefix | Whether to remove the prefix from variable names in the output | false | false |
+| secrets | GitHub secrets to include in the environment variables collection | false | - |
 
 #### Example Workflow
 
