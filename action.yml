@@ -3,7 +3,7 @@ description: Collect env values and write to a file
 author: JeongMin Oh
 
 branding:
-  icon: key
+  icon: icon-plus
   color: purple
 
 inputs:
