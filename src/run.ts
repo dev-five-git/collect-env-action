@@ -1,19 +1,24 @@
 import { writeFile } from 'node:fs/promises'
-import { getBooleanInput, getInput, setFailed } from '@actions/core'
+import { debug, getBooleanInput, getInput, setFailed } from '@actions/core'
 
 export async function run() {
   const prefix = getInput('prefix')
   const output = getInput('output')
   const removePrefix = getBooleanInput('remove-prefix')
+  debug(`prefix: ${prefix}`)
+  debug(`output: ${output}`)
+  debug(`removePrefix: ${removePrefix}`)
+  debug(`process.env: ${JSON.stringify(Object.keys(process.env), null, 2)}`)
+  debug(`process.env: ${JSON.stringify(Object.entries(process.env), null, 2)}`)
 
   try {
     await writeFile(
       output,
-      Object.entries(process.env)
-        .filter(([key]) => key.startsWith(prefix))
+      Object.keys(process.env)
+        .filter((key) => key.startsWith(prefix))
         .map(
-          ([key, value]) =>
-            `${removePrefix ? key.substring(prefix.length) : key}=${value}`,
+          (key) =>
+            `${removePrefix ? key.substring(prefix.length) : key}=${process.env[key]}`,
         )
         .join('\n'),
     )
