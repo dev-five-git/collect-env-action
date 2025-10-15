@@ -6,7 +6,7 @@ This GitHub Action allows you to collect environment variables with a specific p
 
 ```yaml
 - name: Collect environment variables
-  uses: ./action-tools/collect-env
+  uses: dev-five-git/collect-env-action@main
   with:
     prefix: 'API_'
     output: '.env.api'
