@@ -28,11 +28,13 @@ test('should write filtered environment variables to file', async () => {
   process.env.OTHER_VAR = 'other'
 
   mockGetInput.mockImplementation((name: string) => {
-    switch (name as 'prefix' | 'output') {
+    switch (name as 'prefix' | 'output' | 'secrets') {
       case 'prefix':
         return testPrefix
       case 'output':
         return testOutput
+      case 'secrets':
+        return '{"TEST_SECRET": "secret123"}'
     }
   })
 
@@ -46,7 +48,7 @@ test('should write filtered environment variables to file', async () => {
   expect(mockGetBooleanInput).toHaveBeenCalledWith('remove-prefix')
   expect(mockWriteFile).toHaveBeenCalledWith(
     testOutput,
-    'TEST_VAR1=value1\nTEST_VAR2=value2',
+    'TEST_SECRET=secret123\nTEST_VAR1=value1\nTEST_VAR2=value2',
   )
 })
 
@@ -58,11 +60,13 @@ test('should handle writeFile error', async () => {
   process.env.TEST_VAR = 'value'
 
   mockGetInput.mockImplementation((name: string) => {
-    switch (name as 'prefix' | 'output') {
+    switch (name as 'prefix' | 'output' | 'secrets') {
       case 'prefix':
         return testPrefix
       case 'output':
         return testOutput
+      case 'secrets':
+        return '{"TEST_SECRET": "secret123"}'
     }
   })
 
@@ -80,11 +84,13 @@ test('should handle empty environment variables', async () => {
   const testOutput = 'empty.env'
 
   mockGetInput.mockImplementation((name: string) => {
-    switch (name as 'prefix' | 'output') {
+    switch (name as 'prefix' | 'output' | 'secrets') {
       case 'prefix':
         return testPrefix
       case 'output':
         return testOutput
+      case 'secrets':
+        return '{"TEST_SECRET": "secret123"}'
     }
   })
 
@@ -94,6 +100,7 @@ test('should handle empty environment variables', async () => {
   await run()
 
   expect(mockWriteFile).toHaveBeenCalledWith(testOutput, '')
+  expect(mockGetInput).toHaveBeenCalledWith('secrets')
 })
 
 test('should filter environment variables by prefix', async () => {
@@ -106,11 +113,13 @@ test('should filter environment variables by prefix', async () => {
   process.env.API_TIMEOUT = '5000'
 
   mockGetInput.mockImplementation((name: string) => {
-    switch (name as 'prefix' | 'output') {
+    switch (name as 'prefix' | 'output' | 'secrets') {
       case 'prefix':
         return testPrefix
       case 'output':
         return testOutput
+      case 'secrets':
+        return '{"TEST_SECRET": "secret123"}'
     }
   })
 
@@ -136,11 +145,13 @@ test('should remove prefix from environment variables', async () => {
   process.env.API_TIMEOUT = '5000'
 
   mockGetInput.mockImplementation((name: string) => {
-    switch (name as 'prefix' | 'output') {
+    switch (name as 'prefix' | 'output' | 'secrets') {
       case 'prefix':
         return testPrefix
       case 'output':
         return testOutput
+      case 'secrets':
+        return '{"TEST_SECRET": "secret123"}'
     }
   })
 

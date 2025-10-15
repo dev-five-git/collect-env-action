@@ -11,6 +11,7 @@ This GitHub Action allows you to collect environment variables with a specific p
     prefix: 'API_'
     output: '.env.api'
     remove-prefix: true
+    secrets: ${{ toJson(secrets) }}
 ```
 
 #### Inputs
@@ -43,6 +44,7 @@ jobs:
           prefix: 'API_'
           output: '.env.api'
           remove-prefix: true
+          secrets: ${{ toJson(secrets) }}
 ```
 
 #### Example

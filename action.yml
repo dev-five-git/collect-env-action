@@ -13,6 +13,11 @@ inputs:
   output:
     description: The file to write to
     required: true
+  secrets:
+    description: The secrets to collect. This is a JSON object stringified.
+    required: false
+    type: string
+    default: "{}"
   remove-prefix:
     description: The prefix to remove
     required: false
