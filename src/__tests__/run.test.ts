@@ -129,8 +129,8 @@ test('should filter environment variables by prefix', async () => {
 
   const expectedContent = [
     'API_KEY=secret123',
-    'API_URL=https://api.example.com',
     'API_TIMEOUT=5000',
+    'API_URL=https://api.example.com',
   ].join('\n')
 
   expect(mockWriteFile).toHaveBeenCalledWith(testOutput, expectedContent)
@@ -162,8 +162,8 @@ test('should remove prefix from environment variables', async () => {
 
   const expectedContent = [
     'KEY=secret123',
-    'URL=https://api.example.com',
     'TIMEOUT=5000',
+    'URL=https://api.example.com',
   ].join('\n')
 
   expect(mockWriteFile).toHaveBeenCalledWith(testOutput, expectedContent)

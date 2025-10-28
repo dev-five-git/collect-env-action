@@ -13,17 +13,16 @@ export async function run() {
   debug(`process.env: ${JSON.stringify(process.env)}`)
   debug(`secrets: ${JSON.stringify(secrets)}`)
 
-  try {
-    await writeFile(
-      output,
-      Object.entries({ ...secrets, ...process.env })
-        .filter(([key]) => key.startsWith(prefix))
-        .map(
-          ([key, value]) =>
-            `${removePrefix ? key.substring(prefix.length) : key}=${value}`,
-        )
-        .join('\n'),
+  const result = Object.entries({ ...secrets, ...process.env })
+    .filter(([key]) => key.startsWith(prefix))
+    .map(
+      ([key, value]) =>
+        `${removePrefix ? key.substring(prefix.length) : key}=${value}`,
     )
+  result.sort()
+
+  try {
+    await writeFile(output, result.join('\n'))
   } catch (err: unknown) {
     setFailed(err as Error)
   }
