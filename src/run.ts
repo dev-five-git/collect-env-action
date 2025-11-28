@@ -1,4 +1,5 @@
-import { writeFile } from 'node:fs/promises'
+import { mkdir, writeFile } from 'node:fs/promises'
+import { dirname } from 'node:path'
 import { debug, getBooleanInput, getInput, setFailed } from '@actions/core'
 
 export async function run() {
@@ -22,7 +23,9 @@ export async function run() {
   result.sort()
 
   try {
-    await writeFile(output, result.join('\n'))
+    // create directory if it doesn't exist
+    await mkdir(dirname(output), { recursive: true })
+    await writeFile(output, result.join('\n'), 'utf8')
   } catch (err: unknown) {
     setFailed(err as Error)
   }

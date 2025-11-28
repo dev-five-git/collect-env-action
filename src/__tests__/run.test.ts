@@ -1,13 +1,15 @@
 import { expect, mock, test } from 'bun:test'
-import { writeFile } from 'node:fs/promises'
+import { mkdir, writeFile } from 'node:fs/promises'
 import { getBooleanInput, getInput, setFailed } from '@actions/core'
 
+const mockMkdir = mock(mkdir)
 const mockWriteFile = mock(writeFile)
 const mockGetInput = mock(getInput)
 const mockSetFailed = mock(setFailed)
 const mockGetBooleanInput = mock(getBooleanInput)
 
 mock.module('node:fs/promises', () => ({
+  mkdir: mockMkdir,
   writeFile: mockWriteFile,
 }))
 
@@ -39,6 +41,7 @@ test('should write filtered environment variables to file', async () => {
   })
 
   mockWriteFile.mockResolvedValue(undefined)
+  mockMkdir.mockResolvedValue(undefined)
   mockGetBooleanInput.mockReturnValue(false)
 
   await run()
@@ -49,6 +52,7 @@ test('should write filtered environment variables to file', async () => {
   expect(mockWriteFile).toHaveBeenCalledWith(
     testOutput,
     'TEST_SECRET=secret123\nTEST_VAR1=value1\nTEST_VAR2=value2',
+    'utf8',
   )
 })
 
@@ -71,6 +75,7 @@ test('should handle writeFile error', async () => {
   })
 
   mockWriteFile.mockRejectedValue(testError)
+  mockMkdir.mockResolvedValue(undefined)
   mockGetBooleanInput.mockReturnValue(false)
 
   await run()
@@ -95,11 +100,12 @@ test('should handle empty environment variables', async () => {
   })
 
   mockWriteFile.mockResolvedValue(undefined)
+  mockMkdir.mockResolvedValue(undefined)
   mockGetBooleanInput.mockReturnValue(false)
 
   await run()
 
-  expect(mockWriteFile).toHaveBeenCalledWith(testOutput, '')
+  expect(mockWriteFile).toHaveBeenCalledWith(testOutput, '', 'utf8')
   expect(mockGetInput).toHaveBeenCalledWith('secrets')
 })
 
@@ -124,6 +130,7 @@ test('should filter environment variables by prefix', async () => {
   })
 
   mockWriteFile.mockResolvedValue(undefined)
+  mockMkdir.mockResolvedValue(undefined)
   mockGetBooleanInput.mockReturnValue(false)
   await run()
 
@@ -133,7 +140,11 @@ test('should filter environment variables by prefix', async () => {
     'API_URL=https://api.example.com',
   ].join('\n')
 
-  expect(mockWriteFile).toHaveBeenCalledWith(testOutput, expectedContent)
+  expect(mockWriteFile).toHaveBeenCalledWith(
+    testOutput,
+    expectedContent,
+    'utf8',
+  )
 })
 
 test('should remove prefix from environment variables', async () => {
@@ -156,6 +167,7 @@ test('should remove prefix from environment variables', async () => {
   })
 
   mockWriteFile.mockResolvedValue(undefined)
+  mockMkdir.mockResolvedValue(undefined)
   mockGetBooleanInput.mockReturnValue(testRemovePrefix)
 
   await run()
@@ -166,5 +178,9 @@ test('should remove prefix from environment variables', async () => {
     'URL=https://api.example.com',
   ].join('\n')
 
-  expect(mockWriteFile).toHaveBeenCalledWith(testOutput, expectedContent)
+  expect(mockWriteFile).toHaveBeenCalledWith(
+    testOutput,
+    expectedContent,
+    'utf8',
+  )
 })
